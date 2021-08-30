@@ -3,13 +3,12 @@ package ru.vorobyov.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.vorobyov.entites.Product;
 import ru.vorobyov.service.ProductsService;
 
 @Controller
+//@RequestMapping("/shop")
 public class ProductsController {
 	
 	@Autowired
@@ -20,12 +19,13 @@ public class ProductsController {
 		this.productsService = productsService;
 	}
 	
-	@GetMapping("/shop")
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String showIndexPage() {
 		return "index_page";
 	}
 	
-	@GetMapping("/showProducts")
+//	@GetMapping("/showProducts")
+	@RequestMapping(value = "/showProducts", method = RequestMethod.GET)
 	public String showAllProducts(Model uiModel) {
 		uiModel.addAttribute("products", productsService.getProductList());
 		return "products";
@@ -45,7 +45,7 @@ public class ProductsController {
 	}
 	
 	
-	@GetMapping("/processForm")
+	@PostMapping("/processForm")
 	public String processForm(@ModelAttribute("product") Product product) {
 		productsService.addProduct(product);
 		return "addProductForm";
