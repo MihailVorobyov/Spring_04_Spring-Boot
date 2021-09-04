@@ -2,30 +2,50 @@ package ru.vorobyov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.vorobyov.entites.Product;
-import ru.vorobyov.repositories.ProductsRepository;
+import ru.vorobyov.entities.Product;
+import ru.vorobyov.repositories.ProductDao;
 
 import java.util.List;
 
 @Service
 public class ProductsService {
     
-    @Autowired
-    private ProductsRepository productsRepository;
+//    @Autowired
+//    private ProductsRepository productsRepository;
+//
+//    public Product getProductById(int id) {
+//        return productsRepository.getProductById(id);
+//    }
+//
+//    public List<Product> getProductList() {
+//        return productsRepository.getProductList();
+//    }
+//
+//    public void addProduct(Product newProduct) {
+//        productsRepository.addProduct(newProduct);
+//    }
+//
+//    public ProductsService() {
     
-    public Product getProductById(int id) {
-        return productsRepository.getProductById(id);
+    @Autowired
+    private ProductDao productDao;
+    
+    public Product getProductById(long id) {
+        return productDao.findById(id);
     }
     
     public List<Product> getProductList() {
-        return productsRepository.getProductList();
+        return productDao.findAll();
     }
     
     public void addProduct(Product newProduct) {
-        productsRepository.addProduct(newProduct);
+        productDao.saveOrUpdate(newProduct);
     }
-
+    
+    public void deleteById(Long id) {
+        productDao.deleteById(id);
+    }
+    
     public ProductsService() {
-
     }
 }

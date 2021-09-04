@@ -11,12 +11,12 @@
 </head>
 
 <body>
-    <form:form action="processForm" modelAttribute="product">
+    <form:form action="processAdd" modelAttribute="product">
         Название: <form:input path="title" />
         <br>
-        Цена: <form:input path="cost" />
+        Цена: <form:input path="price" />
         <br>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Добавить" />
     </form:form>
 </body>
 </html>

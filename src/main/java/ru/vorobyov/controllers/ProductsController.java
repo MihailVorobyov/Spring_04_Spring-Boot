@@ -3,10 +3,8 @@ package ru.vorobyov.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.vorobyov.entites.Product;
+import org.springframework.web.bind.annotation.*;
+import ru.vorobyov.entities.Product;
 import ru.vorobyov.service.ProductsService;
 
 @Controller
@@ -20,35 +18,48 @@ public class ProductsController {
 		this.productsService = productsService;
 	}
 	
-	@GetMapping("/shop")
+	@GetMapping("/")
 	public String showIndexPage() {
 		return "index_page";
 	}
 	
 	@GetMapping("/showProducts")
 	public String showAllProducts(Model uiModel) {
-		uiModel.addAttribute("products", productsService.getProductList());
+		uiModel.addAttribute("productList", productsService.getProductList());
 		return "products";
 	}
+
+	@GetMapping("/findProduct")
+	public String findProduct(Model uiModel) {
+		uiModel.addAttribute("product", new Product());
+		return "findProduct";
+	}
 	
-	@GetMapping("/product")
-	public String showProduct(Model uiModel, @RequestParam("id") int id) {
-		uiModel.addAttribute("product", productsService.getProductById(id));
-		return "product";
+	@RequestMapping("/processFind")
+	public String processFind(Model uiModel, @ModelAttribute("product") Product product) {
+		Product result = productsService.getProductById(product.getId());
+		uiModel.addAttribute("resultProduct", result);
+		uiModel.addAttribute("product", new Product());
+		return "findProduct";
 	}
 	
 	@GetMapping("/addProduct")
-	public String showAddProductForm(Model uiModel) {
+	public String addProduct(Model uiModel) {
+		
 		Product product = new Product();
 		uiModel.addAttribute("product", product);
 		return "addProductForm";
 	}
 	
-	
-	@GetMapping("/processForm")
-	public String processForm(@ModelAttribute("product") Product product) {
+	@PostMapping("/processAdd")
+	public String processAdd(@ModelAttribute("product") Product product) {
 		productsService.addProduct(product);
-		return "addProductForm";
+		return "redirect:addProduct";
 	}
 	
+	@PostMapping("/processDelete")
+	public String processDelete(@ModelAttribute("product") Product product) {
+		productsService.deleteById(product.getId());
+		return "admin_form";
+	}
 }
